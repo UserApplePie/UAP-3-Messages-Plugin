@@ -158,14 +158,14 @@ class Messages extends Model {
       $from_username = $data2[0]->username;
       //EMAIL MESSAGE USING PHPMAILER
       $mail = new \Helpers\PhpMailer\Mail();
-      $mail->setFrom(EMAIL_FROM);
+      $mail->setFrom(SITEEMAIL);
       $mail->addAddress($email);
-      $mail_subject = " " . SITE_NAME . " - New Private Message";
+      $mail_subject = " " . SITETITLE . " - New Private Message";
       $mail->subject($mail_subject);
       $body = "Hello {$username}<br/><br/>";
-      $body .= "{$from_username} sent you a new Private Message on " . SITE_NAME . "<hr/>";
+      $body .= "{$from_username} sent you a new Private Message on " . SITETITLE . "<hr/>";
       $body .= "<b>:Subject:</b><Br/> {$subject}<hr/> <b>Content:</b><br/> {$content}<hr/>";
-      $body .= "<b><a href=\"" . DIR . "\">Go to " . SITE_NAME . "</a></b>";
+      $body .= "<b><a href=\"" . SITEURL . "\">Go to " . SITETITLE . "</a></b>";
       $mail->body($body);
       $mail->send();
 
