@@ -36,7 +36,7 @@ use Core\Language,
       <!-- Subject -->
       <div class='input-group' style='margin-bottom: 25px'>
         <span class='input-group-addon'><i class='glyphicon glyphicon-book'></i> </span>
-        <?php echo Form::input(array('type' => 'text', 'name' => 'subject', 'class' => 'form-control', 'value' => $data['subject'], 'placeholder' => 'Subject', 'maxlength' => '100')); ?>
+        <?php echo Form::input(array('type' => 'text', 'name' => 'subject', 'class' => 'form-control', 'value' => urldecode($data['subject']), 'placeholder' => 'Subject', 'maxlength' => '100')); ?>
       </div>
 
       <!-- Message Content -->

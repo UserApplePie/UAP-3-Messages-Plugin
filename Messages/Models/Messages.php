@@ -148,27 +148,30 @@ class Messages extends Model {
 		if($count > 0){
       // Message was updated in database, now we send the to user an email notification.
       // Get to user's email from id
-      $data = $this->db->select("SELECT email, username FROM ".PREFIX."users WHERE userID = :userID",
+      $data = $this->db->select("SELECT email, username, privacy_pm FROM ".PREFIX."users WHERE userID = :userID",
   			array(':userID' => $to_userID));
   		$email = $data[0]->email;
       $username = $data[0]->username;
+      $privacy_pm = $data[0]->privacy_pm;
       // Get from user's data
       $data2 = $this->db->select("SELECT username FROM ".PREFIX."users WHERE userID = :userID",
         array(':userID' => $from_userID));
       $from_username = $data2[0]->username;
-      //EMAIL MESSAGE USING PHPMAILER
-      $mail = new \Helpers\PhpMailer\Mail();
-      $mail->setFrom(SITEEMAIL);
-      $mail->addAddress($email);
-      $mail_subject = " " . SITETITLE . " - New Private Message";
-      $mail->subject($mail_subject);
-      $body = "Hello {$username}<br/><br/>";
-      $body .= "{$from_username} sent you a new Private Message on " . SITETITLE . "<hr/>";
-      $body .= "<b>:Subject:</b><Br/> {$subject}<hr/> <b>Content:</b><br/> {$content}<hr/>";
-      $body .= "<b><a href=\"" . SITEURL . "\">Go to " . SITETITLE . "</a></b>";
-      $mail->body($body);
-      $mail->send();
-
+      // Check to see if user has privacy pm enabled
+      if($privacy_pm == "true"){
+        //EMAIL MESSAGE USING PHPMAILER
+        $mail = new \Helpers\PhpMailer\Mail();
+        $mail->setFrom(SITEEMAIL, EMAIL_FROM_NAME);
+        $mail->addAddress($email);
+        $mail_subject = " " . SITETITLE . " - New Private Message";
+        $mail->subject($mail_subject);
+        $body = "Hello {$username}<br/><br/>";
+        $body .= "{$from_username} sent you a new Private Message on " . SITETITLE . "<hr/>";
+        $body .= "<b>:Subject:</b><Br/> {$subject}<hr/> <b>Content:</b><br/> {$content}<hr/>";
+        $body .= "<b><a href=\"" . SITEURL . "\">Go to " . SITETITLE . "</a></b>";
+        $mail->body($body);
+        $mail->send();
+      }
 			return true;
 		}else{
 			return false;

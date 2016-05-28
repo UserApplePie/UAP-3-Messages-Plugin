@@ -38,6 +38,7 @@ class Messages extends Controller{
     Router::any('MessagesOutbox/(:any)', 'App\Modules\Messages\Controllers\Messages@outbox');
 		Router::any('NewMessage', 'App\Modules\Messages\Controllers\Messages@newmessage');
     Router::any('NewMessage/(:any)', 'App\Modules\Messages\Controllers\Messages@newmessage');
+    Router::any('NewMessage/(:any)/(:any)', 'App\Modules\Messages\Controllers\Messages@newmessage');
 	}
 
   // Inbox - Displays all
@@ -399,7 +400,7 @@ class Messages extends Controller{
 	}
 
   // New Message - Displays form to create a new message or reply
-	public function newmessage($to_user = NULL){
+	public function newmessage($to_user = NULL, $subject = NULL){
 
     /** Check to see if user is logged in **/
     if($data['isLoggedIn'] = $this->auth->isLogged()){
@@ -509,6 +510,13 @@ class Messages extends Controller{
       $data['to_username'] = $to_user;
     }else{
       $data['to_username'] = Request::post('to_username');
+    }
+
+    // Check to see if username is in url or post
+    if(isset($subject)){
+      $data['subject'] = $subject;
+    }else{
+      $data['subject'] = Request::post('subject');
     }
 
     // Setup Breadcrumbs
